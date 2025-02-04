@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Hikma Secondary School - Exam Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a237e;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1a237e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0d1757;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success {
+            background-color: #e8f5e9;
+            border: 1px solid #4caf50;
+        }
+
+        .error {
+            background-color: #ffebee;
+            border: 1px solid #f44336;
+        }
+
+        .pass {
+            color: green;
+            font-weight: bold;
+        }
+
+        .fail {
+            color: red;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1a237e;
+            color: white;
+        }
+
+        .grade-A-plus {
+            color: #1a5f7a;
+            font-weight: bold;
+        }
+        .grade-A {
+            color: #1e88e5;
+            font-weight: bold;
+        }
+        .grade-B-plus {
+            color: #43a047;
+            font-weight: bold;
+        }
+        .grade-B {
+            color: #7cb342;
+            font-weight: bold;
+        }
+        .grade-C-plus {
+            color: #fdd835;
+            font-weight: bold;
+        }
+        .grade-C {
+            color: #ffb300;
+            font-weight: bold;
+        }
+        .grade-D-plus {
+            color: #fb8c00;
+            font-weight: bold;
+        }
+        .grade-D {
+            color: #f4511e;
+            font-weight: bold;
+        }
+        .grade-E {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .points {
+            font-weight: bold;
+            color: #1a237e;
+        }
+
+        .status-pass {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        
+        .status-fail {
+            color: #c62828;
+            font-weight: bold;
+        }
+        
+        .grade-level {
+            color: #1a237e;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .student-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .student-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+            border: 3px solid #1a237e;
+        }
+
+        .student-info {
+            flex-grow: 1;
+        }
+
+        .results-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .summary-box {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .summary-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .total-box {
+            background: linear-gradient(135deg, #1a237e, #3949ab);
+            color: white;
+        }
+
+        .status-box {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+        }
+
+        .status-box.failed {
+            background: linear-gradient(135deg, #c62828, #d32f2f);
+        }
+
+        .grade-box {
+            background: linear-gradient(135deg, #0277bd, #039be5);
+        }
+
+        .summary-box h4 {
+            margin: 0;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .summary-box .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: white;
+        }
+
+        .summary-box .subtitle {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Al-Hikma Secondary School</h1>
+        <form id="resultForm">
+            <div class="form-group">
+                <label for="studentId">Student ID:</label>
+                <input type="text" id="studentId" required>
+            </div>
+            <button type="submit">Search Results</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Function to generate random marks between min and max
+        function getRandomMark(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // Arrays of Somali names
+        const firstNames = ['Faarah', 'Ahmed', 'Mohamed', 'Abdi', 'Hassan', 'Ibrahim', 'Yusuf', 'Ali', 'Nur', 'Omar', 
+            'Asha', 'Faduma', 'Hodan', 'Sahra', 'Maryam', 'Amina', 'Halima', 'Nasra', 'Hamdi', 'Ifrah'];
+        
+        const middleNames = ['Ahmed', 'Mohamed', 'Abdi', 'Hassan', 'Ibrahim', 'Ali', 'Omar', 'Yusuf', 'Nur', 'Said',
+            'Hussein', 'Jama', 'Farah', 'Ismail', 'Abdullahi'];
+        
+        const lastNames = ['Ciise', 'Hassan', 'Mohamed', 'Ibrahim', 'Ali', 'Ahmed', 'Jama', 'Abdi', 'Warsame', 'Dirir',
+            'Guuleed', 'Samatar', 'Elmi', 'Duale', 'Geelle'];
+
+        function generateRandomName() {
+            const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const middleName = middleNames[Math.floor(Math.random() * middleNames.length)];
+            const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+            return `${firstName} ${middleName} ${lastName}`;
+        }
+
+        // Generate 300 students data
+        const students = {};
+        
+        for (let i = 1; i <= 300; i++) {
+            const studentId = i.toString().padStart(3, '0');
+            const classGroup = Math.random() > 0.5 ? 'A' : 'B';
+
+            students[studentId] = {
+                name: generateRandomName(),
+                class: `Form 4${classGroup}`,
+                results: {
+                    "Somali": getRandomMark(35, 100),
+                    "English": getRandomMark(35, 100),
+                    "Mathematics": getRandomMark(35, 100),
+                    "Physics": getRandomMark(35, 100),
+                    "Chemistry": getRandomMark(35, 100),
+                    "Biology": getRandomMark(35, 100),
+                    "Geography": getRandomMark(35, 100),
+                    "History": getRandomMark(35, 100),
+                    "Islamic Studies": getRandomMark(35, 100),
+                    "Arabic": getRandomMark(35, 100)
+                }
+            };
+        }
+
+        // Function to get grade based on total marks (now out of 1000)
+        function getGradeFromTotal(totalMarks) {
+            const average = totalMarks / 1000; // 10 maado * 100 = 1000 max points
+            
+            if (average >= 0.95) return ['A+', 'grade-A-plus'];
+            if (average >= 0.90) return ['A', 'grade-A'];
+            if (average >= 0.85) return ['B+', 'grade-B-plus'];
+            if (average >= 0.80) return ['B', 'grade-B'];
+            if (average >= 0.75) return ['C+', 'grade-C-plus'];
+            if (average >= 0.70) return ['C', 'grade-C'];
+            if (average >= 0.65) return ['D+', 'grade-D-plus'];
+            if (average >= 0.60) return ['D', 'grade-D'];
+            return ['E', 'grade-E'];
+        }
+
+        document.getElementById("resultForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const studentId = document.getElementById("studentId").value;
+            const resultDiv = document.getElementById("result");
+            
+            if (students[studentId]) {
+                const student = students[studentId];
+                let totalPoints = 0;
+                
+                let resultHTML = `
+                    <div class="student-info">
+                        <h3>Student Name: ${student.name}</h3>
+                        <h4>Class: ${student.class}</h4>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Marks</th>
+                        </tr>
+                `;
+                
+                for (let subject in student.results) {
+                    const marks = student.results[subject];
+                    resultHTML += `
+                        <tr>
+                            <td>${subject}</td>
+                            <td class="points">${marks}</td>
+                        </tr>
+                    `;
+                    totalPoints += marks;
+                }
+                
+                const [grade, gradeClass] = getGradeFromTotal(totalPoints);
+                const status = totalPoints >= 600 ? ['PASSED', 'status-pass'] : ['FAILED', 'status-fail'];
+                
+                resultHTML += `
+                    </table>
+                    <div class="results-summary">
+                        <div class="summary-box total-box">
+                            <h4>Total Marks</h4>
+                            <div class="value">${totalPoints}</div>
+                        </div>
+                        <div class="summary-box status-box ${totalPoints < 600 ? 'failed' : ''}">
+                            <h4>Status</h4>
+                            <div class="value">${status[0]}</div>
+                        </div>
+                        <div class="summary-box grade-box">
+                            <h4>Grade</h4>
+                            <div class="value">${grade}</div>
+                        </div>
+                    </div>
+                `;
+                
+                resultDiv.innerHTML = resultHTML;
+                resultDiv.className = "success";
+                resultDiv.style.display = "block";
+            } else {
+                resultDiv.innerHTML = "Student ID not found. Please check the ID and try again.";
+                resultDiv.className = "error";
+                resultDiv.style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>
